@@ -1,3 +1,5 @@
+# This directory will hold all headers under /usr/include in image
+# leaving for VSCode's IntelliSense engine.
 # Ignore everything in this directory
 *
 
