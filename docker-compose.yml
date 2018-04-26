@@ -1,0 +1,13 @@
+version: '3.4'
+services:
+  build-toolchain:
+    build:
+      context: .
+      target: toolchain
+    image: develop-toolchain
+    volumes:
+      - type: bind
+        source: ./include
+        target: /include
+    command: bash -c "
+      cp -r --dereference /usr/include/* /include/"

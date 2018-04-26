@@ -1,0 +1,82 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build with CMake",
+            "type": "shell",
+            "command": "docker",
+            "args": [
+                "run",
+                "--rm",
+                "--privileged",
+                "--mount",
+                "type=bind,src=${workspaceRoot}/project,dst=/project",
+                "--mount",
+                "type=bind,src=${workspaceRoot}/ccache,dst=/ccache",
+                "develop-toolchain",
+                "bash",
+                "-c",
+                // mkdir -p /project/build
+                // cd /project/build
+                // cmake ..
+                // make
+                "mkdir -p /project/build && cd /project/build && cmake .. && make"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start debug container",
+            "type": "shell",
+            "command": "docker",
+            "args": [
+                "run",
+                "-d",
+                "--rm",
+                "--privileged",
+                "--mount",
+                "type=bind,src=${workspaceRoot}/project,dst=/project,readonly",
+                "--name",
+                "gdb_container",
+                "develop-toolchain",
+                "bash",
+                "-c",
+                // do nothing and keep alive
+                "tail -f /dev/null"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Stop debug container",
+            "type": "shell",
+            "command": "docker",
+            "args": [
+                "stop",
+                "gdb_container"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
